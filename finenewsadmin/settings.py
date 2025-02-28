@@ -39,9 +39,17 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "fnewsapp",
+    "accounts",
     "rest_framework",
     "corsheaders",
+    "rest_framework_simplejwt",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -82,8 +90,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "fndb",
-        "USER": "fnadmin",
-        "PASSWORD": "fnadmin@123",
+        "USER": "postgres",
+        "PASSWORD": "postgres@123",
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
@@ -132,6 +140,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "media/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend/build/static"),
