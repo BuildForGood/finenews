@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState }  from "react";
 import facebookSvg from "images/Facebook.svg";
 import twitterSvg from "images/Twitter.svg";
 import googleSvg from "images/Google.svg";
@@ -28,6 +28,29 @@ const loginSocials = [
 ];
 
 const PageLogin = () => {
+  const [username, setUsername] = useState("");
+  const [password,setPassword] = useState("");
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const formData = { username,password };
+      const url ='http://127.0.0.1:8000/accounts/api/login/'
+      const response= await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      const data = await response.json();
+      console.log("response:",data);
+      if (response.ok) {
+        setUsername("");
+        setPassword("");
+      } else {
+        console.error("login failed");
+      }
+
+    }
   return (
     <Layout>
       <header className="text-center max-w-2xl mx-auto - mb-14 sm:mb-16 lg:mb-20 ">
@@ -64,8 +87,8 @@ const PageLogin = () => {
           <div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
         </div>
         {/* FORM */}
-        <form className="grid grid-cols-1 gap-6" action="#" method="post">
-          <label className="block">
+        <form onSubmit={handleLogin} className="grid grid-cols-1 gap-6" action="#" method="post">
+          {/*<label className="block">
             <span className="text-neutral-800 dark:text-neutral-200">
               Email address
             </span>
@@ -73,6 +96,18 @@ const PageLogin = () => {
               type="email"
               placeholder="example@example.com"
               className="mt-1"
+            />
+          </label>*/}
+          <label className="block">
+            <span className="text-neutral-800 dark:text-neutral-200">
+              username
+            </span>
+            <Input
+              type="text"
+              placeholder=""
+              className="mt-1"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </label>
           <label className="block">
@@ -82,7 +117,7 @@ const PageLogin = () => {
                 Forgot password?
               </NcLink>
             </span>
-            <Input type="password" className="mt-1" />
+            <Input type="password" className="mt-1" value={password} onChange={(e) => setPassword(e.target.value)} />
           </label>
           <ButtonPrimary type="submit">Continue</ButtonPrimary>
         </form>

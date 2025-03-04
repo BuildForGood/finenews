@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useState } from "react";
 import facebookSvg from "images/Facebook.svg";
 import twitterSvg from "images/Twitter.svg";
 import googleSvg from "images/Google.svg";
@@ -28,6 +28,31 @@ const loginSocials = [
 ];
 
 const PageSignUp = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = { username,email,password };
+    console.log("Signup data:",formData);
+    const url ='http://127.0.0.1:8000/accounts/signup/'
+    const response= await fetch(url, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    if (response.ok) {
+      console.log("Signup successful:", formData);
+      setEmail("");
+      setUsername("");
+      setPassword("");
+    } else {
+      console.error("Signup failed");
+    }
+  }
   return (
     <Layout>
       <header className="text-center max-w-2xl mx-auto - mb-14 sm:mb-16 lg:mb-20">
@@ -64,7 +89,20 @@ const PageSignUp = () => {
           <div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
         </div>
         {/* FORM */}
-        <form className="grid grid-cols-1 gap-6" action="#" method="post">
+        <form onSubmit={handleSignup} className="grid grid-cols-1 gap-6" action="#" method="post">
+        <label className="block">
+            <span className="text-neutral-800 dark:text-neutral-200">
+              username
+            </span>
+            <Input
+              type="text"
+              placeholder=""
+              name="username"
+              className="mt-1"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </label> 
           <label className="block">
             <span className="text-neutral-800 dark:text-neutral-200">
               Email address
@@ -72,14 +110,23 @@ const PageSignUp = () => {
             <Input
               type="email"
               placeholder="example@example.com"
+              name="email"
               className="mt-1"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </label>
           <label className="block">
             <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
               Password
             </span>
-            <Input type="password" className="mt-1" />
+            <Input 
+              type="password" 
+              className="mt-1" 
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </label>
           <ButtonPrimary type="submit">Continue</ButtonPrimary>
         </form>
