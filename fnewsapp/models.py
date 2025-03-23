@@ -13,9 +13,9 @@ class Category(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True,blank=True)
+    #slug = models.SlugField(unique=True,blank=True)
     content = models.TextField()
-    #site = models.ForeignKey(LocalNewsSite,on_delete=models.CASCADE, related_name='articles')
+    site = models.ForeignKey(LocalNewsSite,on_delete=models.CASCADE,null=True, related_name='articles')
     cover = models.ImageField(upload_to='article_cover/', null=True, blank=True)
     image = models.ImageField(upload_to='article_image/', null=True, blank=True)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='articles')
